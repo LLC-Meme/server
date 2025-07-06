@@ -13,7 +13,7 @@ export function generateUrl(encodedSearchTerms: string[]): string {
 
 
 export async function scrapeSponsoredProducts(encodedSearchTerms: string[]): Promise<Array<{title: string}>> {
-  console.log(`スクレイピングを開始します: ${encodedSearchTerms.map(v => decodeURIComponent(v))}`);
+  console.log(`スクレイピングを開始します`);
   
   const browser = await puppeteer.launch({
     headless: true,
