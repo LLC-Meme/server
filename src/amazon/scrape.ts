@@ -33,6 +33,16 @@ export async function scrapeSponsoredProducts(encodedSearchTerms: string[]): Pro
     ]
   });
 
+  const japaneseCookies = [
+    { name: 'i18n-prefs', value: 'JPY', domain: '.amazon.co.jp' },
+    { name: 'lc-main', value: 'ja_JP', domain: '.amazon.co.jp' },
+    { name: 'sp-cdn', value: 'L5Z9:JP', domain: '.amazon.co.jp' },
+    { name: 'ubid-acbjp', value: 'xxx-xxxxxxx-xxxxxxx', domain: '.amazon.co.jp' },
+    { name: 'session-id', value: 'xxx-xxxxxxx-xxxxxxx', domain: '.amazon.co.jp' },
+    { name: 'csm-hit', value: 'tb:xxx+s-xxx|xxx', domain: '.amazon.co.jp' }
+  ];
+  browser.setCookie(...japaneseCookies);
+
   const page = await browser.newPage();
 
   // Remove automation indicators
@@ -52,7 +62,10 @@ export async function scrapeSponsoredProducts(encodedSearchTerms: string[]): Pro
     "Accept-Language": "ja-JP,ja;q=1.0",
     "Referer": "https://www.amazon.co.jp/",
     "Cache-Control": "no-cache",
-    "Cookie": "i18n-prefs=JPY; lc-main=ja_JP"
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "same-origin",
+    "Upgrade-Insecure-Requests": "1"
   };
 
   await page.setExtraHTTPHeaders({...requestHeaders});
