@@ -3,19 +3,17 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 
 puppeteer.use(StealthPlugin());
 
-export function generateUrl(searchTerms: string[]): string {
+export function generateUrl(encodedSearchTerms: string[]): string {
   const baseUrl = "https://amazon.co.jp";
-  const encodedSearchTerms = searchTerms.map((term) => {
-    return encodeURIComponent(term);
-  });
   const keyword = encodedSearchTerms.join("+");
   const locale = encodeURIComponent("カタカナ");
   const sprefix = keyword;
   return `${baseUrl}/s?k=${keyword}&__mk_ja_JP=${locale}&sprefix=${sprefix}`;
 }
 
-export async function scrapeSponsoredProducts(searchTerms: string[]): Promise<Array<{title: string}>> {
-  console.log('Starting Amazon scraper...');
+
+export async function scrapeSponsoredProducts(encodedSearchTerms: string[]): Promise<Array<{title: string}>> {
+  console.log(`スクレイピングを開始します: ${encodedSearchTerms.map(v => decodeURIComponent(v))}`);
   
   const browser = await puppeteer.launch({
     headless: true,
@@ -59,14 +57,14 @@ export async function scrapeSponsoredProducts(searchTerms: string[]): Promise<Ar
 
   await page.setExtraHTTPHeaders({...requestHeaders});
 
-  const url = generateUrl(searchTerms);
-  console.log('Navigating to:', url);
+  const url = generateUrl(encodedSearchTerms);
+  console.log(`${url}に遷移します`);
 
   await page.goto(url, { waitUntil: 'networkidle2' });
-  console.log('Page loaded successfully');
+  console.log('ページの読み込みに成功');
 
   // Simulate human behavior - scroll and wait
-  console.log('Simulating human scrolling behavior...');
+  console.log('スクロール動作を再現します');
   await page.evaluate(() => {
     window.scrollTo(0, document.body.scrollHeight / 4);
   });
@@ -82,20 +80,17 @@ export async function scrapeSponsoredProducts(searchTerms: string[]): Promise<Ar
   });
   await new Promise(resolve => setTimeout(resolve, 1000));
 
-  console.log('Waiting for sponsored products to load...');
+  console.log('広告商品がロードされるのを待機します');
   try {
     await page.waitForSelector('span.puis-sponsored-label-info-icon', { timeout: 10000 });
-    console.log('Sponsored products detected');
+    console.log('広告商品が見つかりました');
   } catch (error) {
     // Continue even if no sponsored products found
     console.error("広告商品が見つかりませんでした。");
     return [];
   }
 
-  console.log('Waiting for additional content to load...');
-  await new Promise(resolve => setTimeout(resolve, 5000));
-
-  console.log('Starting to extract sponsored products...');
+  console.log('広告商品データを抽出します');
   const sponsoredProducts = await page.evaluate(() => {
     const products: any[] = [];
 
@@ -128,7 +123,7 @@ export async function scrapeSponsoredProducts(searchTerms: string[]): Promise<Ar
   });
 
   await browser.close();
-  console.log(`Extraction completed. Found ${sponsoredProducts.length} sponsored products`);
+  console.log(`${sponsoredProducts.length}個の広告商品が見つかりました`);
 
   return sponsoredProducts;
 }
