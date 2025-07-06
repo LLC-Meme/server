@@ -8,7 +8,8 @@
     "test": "jest",
     "start": "node dist/app.js",
     "dev": "nodemon src/app.ts",
-    "clean": "rm -rf dist"
+    "clean": "rm -rf dist",
+    "deploy": "ngrok http http://localhost:3000"
   },
   "dependencies": {
     "express": "^5.1.0",
