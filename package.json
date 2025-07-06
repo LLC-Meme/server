@@ -1,0 +1,23 @@
+{
+  "name": "puppeteer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "build:clean": "rm -rf dist && npm run build",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@types/node": "^24.0.10",
+    "puppeteer": "^24.11.2",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "jest": "^30.0.4",
+    "ts-jest": "^29.4.0"
+  }
+}
