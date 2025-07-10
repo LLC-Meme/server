@@ -33,6 +33,8 @@ export async function scrapeSponsoredProducts(encodedSearchTerms: string[]): Pro
     ]
   });
 
+  const page = await browser.newPage();
+  
   const japaneseCookies = [
     { name: 'i18n-prefs', value: 'JPY', domain: '.amazon.co.jp' },
     { name: 'lc-main', value: 'ja_JP', domain: '.amazon.co.jp' },
@@ -41,9 +43,7 @@ export async function scrapeSponsoredProducts(encodedSearchTerms: string[]): Pro
     { name: 'session-id', value: 'xxx-xxxxxxx-xxxxxxx', domain: '.amazon.co.jp' },
     { name: 'csm-hit', value: 'tb:xxx+s-xxx|xxx', domain: '.amazon.co.jp' }
   ];
-  browser.setCookie(...japaneseCookies);
-
-  const page = await browser.newPage();
+  await page.setCookie(...japaneseCookies);
 
   // Remove automation indicators
   await page.evaluateOnNewDocument(() => {
@@ -75,6 +75,16 @@ export async function scrapeSponsoredProducts(encodedSearchTerms: string[]): Pro
 
   await page.goto(url, { waitUntil: 'networkidle2' });
   console.log('ページの読み込みに成功');
+  
+  // Force Japanese language if redirected to English
+  const currentUrl = page.url();
+  if (!currentUrl.includes('__mk_ja_JP')) {
+    const japaneseUrl = currentUrl.includes('?') 
+      ? `${currentUrl}&__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&language=ja_JP`
+      : `${currentUrl}?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&language=ja_JP`;
+    await page.goto(japaneseUrl, { waitUntil: 'networkidle2' });
+    console.log('日本語版に強制的にリダイレクトしました');
+  }
 
   // Simulate human behavior - scroll and wait
   console.log('スクロール動作を再現します');
