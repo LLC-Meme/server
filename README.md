@@ -15,3 +15,7 @@
 パラメーターに検索したいワードをエンコードした状態で指定
 `curl https://localhost:3000/amazon/scrape/sponsored-products?q=<word1>,<word2>`
 
+例
+```
+curl "http://localhost:3000/amazon/scrape/sponsored-products?q=%E5%8C%96%E7%B2%A7%E6%B0%B4,%E7%BE%8E%E7%99%BD"
+```
