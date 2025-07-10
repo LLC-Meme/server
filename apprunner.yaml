@@ -1,0 +1,43 @@
+version: 1.0
+runtime: docker
+build:
+  commands:
+    build:
+      - echo "No additional build commands"
+run:
+  runtime-version: latest
+  command: node dist/app.js
+  network:
+    port: 3000
+    env: PORT
+  env:
+    - name: NODE_ENV
+      value: production
+    - name: PUPPETEER_EXECUTABLE_PATH
+      value: /usr/bin/chromium
+  secrets:
+    # Add any secrets from AWS Systems Manager or Secrets Manager here
+    # - name: API_KEY
+    #   value-from: "arn:aws:secretsmanager:region:account-id:secret:secret-name"
+  compute:
+    cpu: 1 vCPU
+    memory: 2 GB
+  autoscaling:
+    min_size: 1
+    max_size: 3
+    cooldown_seconds: 60
+    scale_in_cooldown_seconds: 180
+    target:
+      - type: CPU
+        value: 70
+      - type: MEMORY
+        value: 80
+      - type: REQUEST_COUNT
+        value: 100
+        interval: 60s
+  health_check:
+    path: /health
+    interval: 10
+    timeout: 5
+    healthy_threshold: 1
+    unhealthy_threshold: 5
