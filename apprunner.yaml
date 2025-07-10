@@ -5,7 +5,6 @@ build:
     build:
       - echo "No additional build commands"
 run:
-  runtime-version: latest
   command: node dist/app.js
   network:
     port: 3000
