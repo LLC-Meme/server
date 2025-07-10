@@ -13,6 +13,10 @@ app.get("/", (req: Request, res: Response) => {
   res.json({ message: "Server is running" });
 });
 
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({ status: 'healthy' });
+});
+
 app.get("/amazon/scrape/sponsored-products", async(req: Request, res: Response) => {
 
   const q = req.query.q as string;
