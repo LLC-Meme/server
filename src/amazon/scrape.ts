@@ -6,9 +6,10 @@ puppeteer.use(StealthPlugin());
 export function generateUrl(encodedSearchTerms: string[]): string {
   const baseUrl = "https://amazon.co.jp";
   const keyword = encodedSearchTerms.join("+");
+  const language = "ja_JP";
   const locale = encodeURIComponent("カタカナ");
   const sprefix = keyword;
-  return `${baseUrl}/s?k=${keyword}&__mk_ja_JP=${locale}&sprefix=${sprefix}`;
+  return `${baseUrl}/s?k=${keyword}&language=${language}&__mk_ja_JP=${locale}&sprefix=${sprefix}`;
 }
 
 
