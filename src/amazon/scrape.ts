@@ -60,7 +60,7 @@ export async function scrapeSponsoredProducts(encodedSearchTerms: string[]): Pro
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
     "Content-Language": "ja-JP",
     "Accept-Language": "ja-JP,ja;q=1.0",
-    "Referer": "https://www.amazon.co.jp/",
+    "Referer": "https://www.amazon.co.jp/?language=ja_JP",
     "Cache-Control": "no-cache",
     "Sec-Fetch-Dest": "document",
     "Sec-Fetch-Mode": "navigate",
