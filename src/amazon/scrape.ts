@@ -20,6 +20,8 @@ export async function scrapeSponsoredProducts(encodedSearchTerms: string[]): Pro
     headless: true,
     executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
     devtools: false,
+    protocolTimeout: 180000,
+    timeout: 120000,
     args: [
       '--lang=ja-JP',
       '--accept-lang=ja-JP',
